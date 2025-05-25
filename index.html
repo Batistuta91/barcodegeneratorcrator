@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <title>צור את הברקוד שלך</title>
+  <style>
+    :root {
+      --primary-color: #007bff;
+      --primary-hover: #0056b3;
+      --text-color: #333;
+      --bg-color: #f4f4f9;
+      --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      --transition: 0.3s ease;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: var(--text-color);
+      transition: background-color var(--transition), color var(--transition);
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2em;
+      background: #fff;
+      box-shadow: var(--shadow);
+      border-radius: 10px;
+      transition: background-color var(--transition), color var(--transition);
+    }
+
+    .language-buttons {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1em;
+    }
+
+    .language-button {
+      font-size: 1em;
+      padding: 0.5em 1em;
+      margin: 0 0.5em;
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+    }
+
+    .language-button:hover {
+      background: var(--primary-hover);
+      transform: scale(1.05);
+    }
+
+    .barcode-input {
+      margin-top: 1em;
+      text-align: center;
+      padding: 0.5em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      max-width: 300px;
+      transition: border-color var(--transition), background-color var(--transition), color var(--transition);
+    }
+
+    .barcode-input:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+
+    .copy-input {
+      margin-top: 1em;
+      text-align: center;
+    }
+
+    .print-button-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 2em;
+    }
+
+    .print-button {
+      font-size: 1.2em;
+      padding: 0.5em 1em;
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+
+    .print-button:hover {
+      background: var(--primary-hover);
+    }
+
+    .logo {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 200px;
+      height: auto;
+    }
+
+    .barcode-element {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 1em;
+      width: 100%;
+    }
+
+    .label-and-text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 0.3em;
+      width: 100%;
+    }
+
+    .barcode-label {
+      font-weight: bold;
+      margin-bottom: 0.5em;
+      text-align: center;
+    }
+
+    .entered-text {
+      flex-grow: 1;
+      text-align: center;
+      margin-bottom: 0.5em;
+    }
+
+    .barcode {
+      font-family: 'Libre Barcode 39', cursive;
+      font-size: 48px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .company-name {
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-bottom: 0.5em;
+      width: 100%;
+      text-align: center;
+    }
+
+    .frame {
+      border: 1px solid #ccc;
+      background: #f9f9f9;
+      display: inline-block;
+      padding: 1em;
+      margin: 1em;
+      border-radius: 5px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: background-color var(--transition), color var(--transition), border-color var(--transition);
+    }
+
+    @media print {
+      .container {
+        display: none;
+      }
+      .frame {
+        border: 1px solid #ccc;
+        margin-bottom: 2em;
+        display: block;
+        padding: 1em;
+        width: fit-content;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 1em;
+      }
+      .barcode-input {
+        max-width: 100%;
+      }
+      .language-buttons {
+        flex-direction: column;
+      }
+      .language-button {
+        margin: 0.5em 0;
+      }
+    }
+
+    .accessibility-toolbar {
+      position: fixed;
+      bottom: 1em;
+      right: 1em;
+      z-index: 1000;
+    }
+
+    .accessibility-button {
+      padding: 0.5em;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 0.2em;
+      transition: background-color var(--transition);
+    }
+
+    .accessibility-button:focus,
+    .accessibility-button:hover {
+      background: #555;
+    }
+
+    body.high-contrast {
+      background-color: #000;
+      color: #fff;
+    }
+
+    body.high-contrast .container {
+      background-color: #222;
+      color: #fff;
+      box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
+    }
+
+    body.high-contrast .barcode-input {
+      background-color: #333;
+      color: #fff;
+      border-color: #666;
+    }
+
+    body.high-contrast .frame {
+      background-color: #222;
+      color: #fff;
+      border-color: #666;
+    }
+
+    body.high-contrast .accessibility-button {
+      background-color: #555;
+      color: #fff;
+    }
+
+    body.high-contrast .barcode {
+      color: #fff;
+    }
+
+    body.high-contrast .company-name,
+    body.high-contrast .barcode-label,
+    body.high-contrast .entered-text {
+      color: #fff;
+    }
+
+    body.high-contrast #copyButton,
+    body.high-contrast #copy {
+      background-color: #333;
+      color: #fff;
+      border-color: #666;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+39&display=swap" rel="stylesheet">
+</head>
+<body>
+  <img class="logo" src="https://cdn.glitch.global/9726a4ab-4574-49d7-b064-6b475be18bad/07c4917b-19f1-4364-b996-daa6f36e3790.image.png?v=1736146128831" alt="Logo">
+  <div class="language-buttons" aria-label="Language selection">
+    <button class="language-button" onclick="setLanguage('he')" aria-label="עברית">עברית</button>
+    <button class="language-button" onclick="setLanguage('en')" aria-label="English">English</button>
+    <button class="language-button" onclick="setLanguage('zh')" aria-label="中文">中文</button>
+  </div>
+  <div class="container" role="main" aria-label="Barcode Generator">
+    <h1 id="title" aria-live="polite">צור את הברקוד שלך</h1>
+    <div class="barcode-container">
+      <label for="companyName">שם החברה:</label>
+      <input type="text" class="barcode-input" id="companyName" placeholder="שם החברה" aria-label="Company Name" aria-required="true">
+
+      <div>
+        <label for="pnInput" class="barcode-label" id="pnLabel">P/N:</label>
+        <input type="text" class="barcode-input" id="pnInput" placeholder="טקסט באותיות גדולות" aria-label="P/N" aria-required="true">
+        <div class="barcode pn-barcode" aria-live="polite" aria-label="Barcode for P/N"></div>
+      </div>
+      <div>
+        <label for="qtyInput" class="barcode-label" id="qtyLabel">QTY:</label>
+        <input type="number" class="barcode-input" id="qtyInput" placeholder="מספרים בלבד" aria-label="QTY" aria-required="true">
+        <div class="barcode qty-barcode" aria-live="polite" aria-label="Barcode for QTY"></div>
+      </div>
+      <div>
+        <label for="lotInput" class="barcode-label" id="lotLabel">LOT:</label>
+        <input type="text" class="barcode-input" id="lotInput" placeholder="טקסט באותיות גדולות" aria-label="LOT" aria-required="true">
+        <div class="barcode lot-barcode" aria-live="polite" aria-label="Barcode for LOT"></div>
+      </div>
+      <div>
+        <label for="dcInput" class="barcode-label" id="dcLabel">D/C:</label>
+        <input type="text" class="barcode-input" id="dcInput" placeholder="תאריך 01.01.2222" aria-label="D/C" aria-required="true">
+        <div class="barcode dc-barcode" aria-live="polite" aria-label="Barcode for D/C"></div>
+      </div>
+    </div>
+    <div class="copy-input">
+      <label for="copy" id="copyLabel">מספר עותקים:</label>
+      <input type="number" id="copy" min="1" value="1" aria-label="Number of Copies" aria-required="true">
+      <button id="copyButton" onclick="generateCopies()">צור עותקים</button>
+    </div>
+    <div id="copiesContainer" aria-live="polite"></div>
+    <div class="print-button-container">
+      <button class="print-button" onclick="showPreview()" aria-label="Show Preview">הצג</button>
+    </div>
+  </div>
+
+  <div class="accessibility-toolbar" aria-label="Accessibility Tools">
+    <button class="accessibility-button" id="increaseFont" tabindex="0" onclick="increaseFontSize()">הגדל גופן</button>
+    <button class="accessibility-button" id="decreaseFont" tabindex="0" onclick="decreaseFontSize()">הקטן גופן</button>
+    <button class="accessibility-button" id="highContrast" tabindex="0" onclick="toggleHighContrast()">ניגודיות גבוהה</button>
+    <button class="accessibility-button" id="resetAccessibility" tabindex="0" onclick="resetAccessibility()">איפוס</button>
+  </div>
+
+  <script>
+    let isHighContrast = false;
+    let currentLanguage = 'he';
+
+    const translations = {
+      en: {
+        title: "Create Your Barcode",
+        companyName: "Company Name",
+        companyLabel: "Company Name:",
+        pnLabel: "P/N:",
+        qtyLabel: "QTY:",
+        lotLabel: "LOT:",
+        dcLabel: "D/C:",
+        pnInput: "Text in uppercase",
+        qtyInput: "Numbers only",
+        lotInput: "Text in uppercase",
+        dcInput: "Date 01.01.2222",
+        copyLabel: "Number of Copies:",
+        copyButton: "Create Copies",
+        printButton: "Print",
+        showButton: "Show",
+        invalidQty: "Please enter a valid number for quantity",
+        invalidDate: "Please enter a valid date format (DD.MM.YYYY)",
+        increaseFont: "Increase Font",
+        decreaseFont: "Decrease Font",
+        highContrast: "High Contrast",
+        resetAccessibility: "Reset"
+      },
+      he: {
+        title: "צור את הברקוד שלך",
+        companyName: "שם החברה",
+        companyLabel: "שם החברה:",
+        pnLabel: "P/N:",
+        qtyLabel: "QTY:",
+        lotLabel: "LOT:",
+        dcLabel: "D/C:",
+        pnInput: "טקסט באותיות גדולות",
+        qtyInput: "מספרים בלבד",
+        lotInput: "טקסט באותיות גדולות",
+        dcInput: "תאריך 01.01.2222",
+        copyLabel: "מספר עותקים:",
+        copyButton: "צור עותקים",
+        printButton: "הדפס",
+        showButton: "הצג",
+        invalidQty: "נא להזין מספר תקין לכמות",
+        invalidDate: "נא להזין תאריך בפורמט תקין (DD.MM.YYYY)",
+        increaseFont: "הגדל גופן",
+        decreaseFont: "הקטן גופן",
+        highContrast: "ניגודיות גבוהה",
+        resetAccessibility: "איפוס"
+      },
+      zh: {
+        title: "创建您的条形码",
+        companyName: "公司名称",
+        companyLabel: "公司名称:",
+        pnLabel: "P/N:",
+        qtyLabel: "QTY:",
+        lotLabel: "LOT:",
+        dcLabel: "D/C:",
+        pnInput: "大写字母",
+        qtyInput: "仅限数字",
+        lotInput: "大写字母",
+        dcInput: "日期 01.01.2222",
+        copyLabel: "副本数量:",
+        copyButton: "创建副本",
+        printButton: "打印",
+        showButton: "显示",
+        invalidQty: "请输入有效的数量",
+        invalidDate: "请输入有效的日期格式 (DD.MM.YYYY)",
+        increaseFont: "增大字体",
+        decreaseFont: "减小字体",
+        highContrast: "高对比度",
+        resetAccessibility: "重置"
+      }
+    };
+
+    const elements = {
+      companyName: document.getElementById("companyName"),
+      pnInput: document.getElementById("pnInput"),
+      qtyInput: document.getElementById("qtyInput"),
+      lotInput: document.getElementById("lotInput"),
+      dcInput: document.getElementById("dcInput"),
+      copiesContainer: document.getElementById("copiesContainer"),
+      copyInput: document.getElementById("copy"),
+      increaseFont: document.getElementById("increaseFont"),
+      decreaseFont: document.getElementById("decreaseFont"),
+      highContrast: document.getElementById("highContrast"),
+      resetAccessibility: document.getElementById("resetAccessibility")
+    };
+
+    function debounce(func, wait) {
+      let timeout;
+      return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+      };
+    }
+
+    function sanitizeInput(input) {
+      return input.replace(/</g, '<').replace(/>/g, '>');
+    }
+
+    function setLanguage(language) {
+      currentLanguage = language;
+      localStorage.setItem('language', language);
+      document.getElementById("title").innerText = translations[language].title;
+      document.querySelector("label[for='companyName']").textContent = translations[language].companyLabel;
+      elements.companyName.placeholder = translations[language].companyName;
+      document.getElementById("pnLabel").innerText = translations[language].pnLabel;
+      document.getElementById("qtyLabel").innerText = translations[language].qtyLabel;
+      document.getElementById("lotLabel").innerText = translations[language].lotLabel;
+      document.getElementById("dcLabel").innerText = translations[language].dcLabel;
+      elements.pnInput.placeholder = translations[language].pnInput;
+      elements.qtyInput.placeholder = translations[language].qtyInput;
+      elements.lotInput.placeholder = translations[language].lotInput;
+      elements.dcInput.placeholder = translations[language].dcInput;
+      document.getElementById("copyLabel").innerText = translations[language].copyLabel;
+      document.getElementById("copyButton").innerText = translations[language].copyButton;
+      document.querySelector(".print-button").innerText = translations[language].showButton;
+      // Update accessibility buttons
+      elements.increaseFont.innerText = translations[language].increaseFont;
+      elements.decreaseFont.innerText = translations[language].decreaseFont;
+      elements.highContrast.innerText = translations[language].highContrast;
+      elements.resetAccessibility.innerText = translations[language].resetAccessibility;
+    }
+
+    function updateBarcode(inputId, barcodeClass) {
+      const input = elements[inputId];
+      const barcodeDiv = document.querySelector(`.${barcodeClass}`);
+      barcodeDiv.innerText = `*${sanitizeInput(input.value)}*`;
+    }
+
+    const debouncedGenerateBarcodes = debounce(() => {
+      updateBarcode('pnInput', 'pn-barcode');
+      updateBarcode('qtyInput', 'qty-barcode');
+      updateBarcode('lotInput', 'lot-barcode');
+      updateBarcode('dcInput', 'dc-barcode');
+    }, 300);
+
+    function createBarcodeElement(labelText, barcodeText, enteredText) {
+      return `
+        <div class="barcode-element">
+          <div class="label-and-text">
+            <span class="barcode-label">${labelText}</span>
+            <span class="entered-text">${sanitizeInput(enteredText)}</span>
+          </div>
+          <div class="barcode">${barcodeText}</div>
+        </div>
+      `;
+    }
+
+    function generateCopies() {
+      const numCopies = parseInt(elements.copyInput.value);
+      if (isNaN(numCopies) || numCopies < 1) {
+        alert(translations[currentLanguage].invalidQty);
+        return;
+      }
+
+      const values = {
+        company: elements.companyName.value,
+        pn: elements.pnInput.value,
+        qty: elements.qtyInput.value,
+        lot: elements.lotInput.value,
+        dc: elements.dcInput.value
+      };
+
+      if (!isValidNumber(values.qty)) {
+        alert(translations[currentLanguage].invalidQty);
+        return;
+      }
+
+      if (!isValidDate(values.dc)) {
+        alert(translations[currentLanguage].invalidDate);
+        return;
+      }
+
+      let html = '';
+      for (let i = 0; i < numCopies; i++) {
+        html += `
+          <div class="frame" role="region" aria-label="Barcode Copy ${i + 1}">
+            <div class="company-name">${sanitizeInput(values.company)}</div>
+            ${createBarcodeElement(translations[currentLanguage].pnLabel, `*${values.pn}*`, values.pn)}
+            ${createBarcodeElement(translations[currentLanguage].qtyLabel, `*${values.qty}*`, values.qty)}
+            ${createBarcodeElement(translations[currentLanguage].lotLabel, `*${values.lot}*`, values.lot)}
+            ${createBarcodeElement(translations[currentLanguage].dcLabel, `*${values.dc}*`, values.dc)}
+          </div>
+        `;
+      }
+      elements.copiesContainer.innerHTML = html;
+    }
+
+    function isValidNumber(value) {
+      return /^\d+$/.test(value);
+    }
+
+    function isValidDate(value) {
+      const datePattern = /^\d{2}\.\d{2}\.\d{4}$/;
+      return datePattern.test(value);
+    }
+
+    function showPreview() {
+      const previewWindow = window.open("", "_blank");
+      const htmlContent = elements.copiesContainer.innerHTML;
+      const printButtonLabel = translations[currentLanguage].printButton;
+      const isHighContrastClass = isHighContrast ? 'high-contrast' : '';
+
+      previewWindow.document.write(`
+        <html>
+        <head>
+          <title>Preview</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 0;
+              padding: 0;
+              background-color: #f4f4f9;
+              transition: background-color 0.3s, color 0.3s;
+            }
+            body.high-contrast {
+              background-color: #000;
+              color: #fff;
+            }
+            .frame {
+              border: 1px solid #ccc;
+              display: inline-block;
+              padding: 1em;
+              margin: 1em;
+              text-align: center;
+              vertical-align: top;
+              background: #fff;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+              border-radius: 5px;
+              transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+            }
+            body.high-contrast .frame {
+              background-color: #222;
+              color: #fff;
+              border-color: #666;
+              box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+            }
+            .company-name {
+              font-weight: bold;
+              font-size: 1.2em;
+              margin-bottom: 0.5em;
+              transition: color 0.3s;
+            }
+            body.high-contrast .company-name {
+              color: #fff;
+            }
+            .barcode-element {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              margin-bottom: 1em;
+            }
+            .barcode-label {
+              font-weight: bold;
+              margin-bottom: 0.5em;
+              text-align: center;
+              transition: color 0.3s;
+            }
+            body.high-contrast .barcode-label {
+              color: #fff;
+            }
+            .entered-text {
+              text-align: center;
+              margin-bottom: 0.5em;
+              transition: color 0.3s;
+            }
+            body.high-contrast .entered-text {
+              color: #fff;
+            }
+            .barcode {
+              font-family: 'Libre Barcode 39', cursive;
+              font-size: 48px;
+              width: 100%;
+              text-align: center;
+              transition: color 0.3s;
+            }
+            body.high-contrast .barcode {
+              color: #fff;
+            }
+            .print-button {
+              font-size: 1.2em;
+              padding: 0.5em 1em;
+              background: #007bff;
+              color: #fff;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+              transition: background 0.3s ease;
+              margin-top: 2em;
+              display: block;
+            }
+            .print-button:hover {
+              background: #0056b3;
+            }
+            .print-button-container {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 100%;
+              position: fixed;
+              bottom: 20px;
+            }
+            @media print {
+              .print-button-container {
+                display: none;
+              }
+            }
+          </style>
+          <link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+39&display=swap" rel="stylesheet">
+        </head>
+        <body class="${isHighContrastClass}">
+          ${htmlContent}
+          <div class="print-button-container">
+            <button class="print-button" onclick="window.print()">${printButtonLabel}</button>
+          </div>
+        </body>
+        </html>
+      `);
+      previewWindow.document.close();
+    }
+
+    function increaseFontSize() {
+      document.body.style.fontSize = "1.2em";
+      localStorage.setItem('fontSize', '1.2em');
+    }
+
+    function decreaseFontSize() {
+      document.body.style.fontSize = "0.8em";
+      localStorage.setItem('fontSize', '0.8em');
+    }
+
+    function toggleHighContrast() {
+      isHighContrast = !isHighContrast;
+      document.body.classList.toggle('high-contrast', isHighContrast);
+      localStorage.setItem('highContrast', isHighContrast);
+    }
+
+    function resetAccessibility() {
+      document.body.style.fontSize = "";
+      document.body.classList.remove('high-contrast');
+      isHighContrast = false;
+      localStorage.removeItem('fontSize');
+      localStorage.setItem('highContrast', false);
+    }
+
+    // Initialize
+    window.onload = () => {
+      const savedLang = localStorage.getItem('language') || 'he';
+      setLanguage(savedLang);
+      isHighContrast = localStorage.getItem('highContrast') === 'true';
+      if (isHighContrast) document.body.classList.add('high-contrast');
+      const savedFontSize = localStorage.getItem('fontSize');
+      if (savedFontSize) document.body.style.fontSize = savedFontSize;
+
+      elements.companyName.addEventListener('input', debouncedGenerateBarcodes);
+      elements.pnInput.addEventListener('input', debouncedGenerateBarcodes);
+      elements.qtyInput.addEventListener('input', debouncedGenerateBarcodes);
+      elements.lotInput.addEventListener('input', debouncedGenerateBarcodes);
+      elements.dcInput.addEventListener('input', debouncedGenerateBarcodes);
+    };
+  </script>
+</body>
+</html>
