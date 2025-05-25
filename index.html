@@ -1,868 +1,683 @@
-
 <!DOCTYPE html>
-<html lang="he">
+<html lang="he" dir="rtl">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מפענח תאריך ייצור</title>
-<style>
-   body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #eef2f3;
-    color: #333;
-    direction: rtl; /* ברירת מחדל */
-}
-
-
-    h1 {
-        background-color: #2b5876;
-        background-image: linear-gradient(to right, #4e4376, #2b5876);
-        color: white;
-        width: 100%;
-        text-align: center;
-        padding: 1.5rem 0;
-        margin: 0;
-        font-size: 2rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  <title>׳¦׳•׳¨ ׳׳× ׳”׳‘׳¨׳§׳•׳“ ׳©׳׳</title>
+  <style>
+    :root {
+      --primary-color: #007bff;
+      --primary-hover: #0056b3;
+      --text-color: #333;
+      --bg-color: #f4f4f9;
+      --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      --transition: 0.3s ease;
     }
 
-    form {
-        background-color: white;
-        padding: 2rem;
-        border-radius: 12px;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        width: 90%;
-        max-width: 500px;
-        margin-top: 2rem;
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: var(--text-color);
+      transition: background-color var(--transition), color var(--transition);
     }
 
-    label {
-        display: block;
-        margin-bottom: 0.75rem;
-        font-weight: bold;
-        font-size: 1rem;
-        color: #4e4376;
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2em;
+      background: #fff;
+      box-shadow: var(--shadow);
+      border-radius: 10px;
+      transition: background-color var(--transition), color var(--transition);
     }
 
-    select, input {
-        width: 100%;
-        padding: 0.6rem;
-        margin-bottom: 1.5rem;
+    .language-buttons {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1em;
+    }
+
+    .language-button {
+      font-size: 1em;
+      padding: 0.5em 1em;
+      margin: 0 0.5em;
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+    }
+
+    .language-button:hover {
+      background: var(--primary-hover);
+      transform: scale(1.05);
+    }
+
+    .barcode-input {
+      margin-top: 1em;
+      text-align: center;
+      padding: 0.5em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      max-width: 300px;
+      transition: border-color var(--transition), background-color var(--transition), color var(--transition);
+    }
+
+    .barcode-input:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+
+    .copy-input {
+      margin-top: 1em;
+      text-align: center;
+    }
+
+    .print-button-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 2em;
+    }
+
+    .print-button {
+      font-size: 1.2em;
+      padding: 0.5em 1em;
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+
+    .print-button:hover {
+      background: var(--primary-hover);
+    }
+
+    .logo {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 200px;
+      height: auto;
+    }
+
+    .barcode-element {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 1em;
+      width: 100%;
+    }
+
+    .label-and-text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 0.3em;
+      width: 100%;
+    }
+
+    .barcode-label {
+      font-weight: bold;
+      margin-bottom: 0.5em;
+      text-align: center;
+    }
+
+    .entered-text {
+      flex-grow: 1;
+      text-align: center;
+      margin-bottom: 0.5em;
+    }
+
+    .barcode {
+      font-family: 'Libre Barcode 39', cursive;
+      font-size: 48px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .company-name {
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-bottom: 0.5em;
+      width: 100%;
+      text-align: center;
+    }
+
+    .frame {
+      border: 1px solid #ccc;
+      background: #f9f9f9;
+      display: inline-block;
+      padding: 1em;
+      margin: 1em;
+      border-radius: 5px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: background-color var(--transition), color var(--transition), border-color var(--transition);
+    }
+
+    @media print {
+      .container {
+        display: none;
+      }
+      .frame {
         border: 1px solid #ccc;
-        border-radius: 6px;
-        font-size: 1rem;
-        transition: border-color 0.3s;
+        margin-bottom: 2em;
+        display: block;
+        padding: 1em;
+        width: fit-content;
+      }
     }
 
-    select:focus, input:focus {
-        outline: none;
-        border-color: #2b5876;
+    @media (max-width: 600px) {
+      .container {
+        padding: 1em;
+      }
+      .barcode-input {
+        max-width: 100%;
+      }
+      .language-buttons {
+        flex-direction: column;
+      }
+      .language-button {
+        margin: 0.5em 0;
+      }
     }
 
-    button {
-        background-color: #2b5876;
-        background-image: linear-gradient(to right, #4e4376, #2b5876);
-        color: white;
-        border: none;
-        padding: 0.8rem;
-        border-radius: 6px;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: background-color 0.3s, transform 0.2s;
+    .accessibility-toolbar {
+      position: fixed;
+      bottom: 1em;
+      right: 1em;
+      z-index: 1000;
     }
 
-    button:hover {
-        background-color: #4e4376;
-        transform: translateY(-2px);
+    .accessibility-button {
+      padding: 0.5em;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 0.2em;
+      transition: background-color var(--transition);
     }
 
-    button:active {
-        transform: translateY(0);
+    .accessibility-button:focus,
+    .accessibility-button:hover {
+      background: #555;
     }
 
-    p#result {
-        background-color: #ffffff;
-        padding: 1rem;
-        border-radius: 12px;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        width: 90%;
-        max-width: 500px;
-        margin-top: 1rem;
-        word-break: break-word;
-        color: #333;
-        font-weight: bold;
-        font-size: 1.1rem;
+    body.high-contrast {
+      background-color: #000;
+      color: #fff;
     }
 
-    #barcode-list {
-        margin-top: 1rem;
-        max-width: 500px;
-        word-break: break-word;
-        text-align: center;
+    body.high-contrast .container {
+      background-color: #222;
+      color: #fff;
+      box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
     }
 
-    #barcode-list ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
+    body.high-contrast .barcode-input {
+      background-color: #333;
+      color: #fff;
+      border-color: #666;
     }
 
-    #barcode-list li {
-        margin-bottom: 0.5rem;
-        font-size: 0.9rem;
-        color: #666;
+    body.high-contrast .frame {
+      background-color: #222;
+      color: #fff;
+      border-color: #666;
     }
 
-    #charCount {
-        font-size: 0.9rem;
-        color: #2b5876;
-        margin-bottom: 1rem;
-        font-weight: bold;
+    body.high-contrast .accessibility-button {
+      background-color: #555;
+      color: #fff;
     }
 
-    #decodingBoxes {
-        direction: ltr;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 5px;
-        justify-content: center;
-        align-items: center;
-        width: auto;
-        padding: 10px;
-        margin: 20px auto;
-        border: 1px solid #ddd;
-        background-color: #f7f7f7;
-        border-radius: 8px;
+    body.high-contrast .barcode {
+      color: #fff;
     }
 
-    #decodingBoxes div {
-        width: 40px;
-        height: 40px;
-        border: 1px solid #4e4376;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 14px;
-        font-weight: bold;
-        background-color: #ffffff;
-        border-radius: 6px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    body.high-contrast .company-name,
+    body.high-contrast .barcode-label,
+    body.high-contrast .entered-text {
+      color: #fff;
     }
-select#language {
-    appearance: none; /* ביטול סגנון דפדפן ברירת מחדל */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    text-align: center; /* יישור הטקסט */
-    text-align-last: center; /* יישור אופציות בתפריט */
-    direction: rtl; /* יישור RTL */
-    color: #000; /* צבע טקסט */
-    background-color: #fff; /* צבע רקע */
-    border: 1px solid #ccc; /* גבול */
-    border-radius: 4px; /* פינות מעוגלות */
-    padding: 0.3rem; /* ריווח פנימי */
-    font-size: 12px; /* גודל טקסט קטן יותר */
-    width: 100px; /* רוחב קטן יותר */
-    height: 30px; /* גובה קטן יותר */
-}
 
-
-
-    </style>
+    body.high-contrast #copyButton,
+    body.high-contrast #copy {
+      background-color: #333;
+      color: #fff;
+      border-color: #666;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+39&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>מפענח תאריך ייצור</h1>
-   <select id="language">
-    <option value="he">עברית</option>
-    <option value="en">English</option>
-    <option value="ar">العربية</option>
-    <option value="fr">Français</option>
-    <option value="es">Español</option>
-</select>
+  <img class="logo" src="https://cdn.glitch.global/9726a4ab-4574-49d7-b064-6b475be18bad/07c4917b-19f1-4364-b996-daa6f36e3790.image.png?v=1736146128831" alt="Logo">
+  <div class="language-buttons" aria-label="Language selection">
+    <button class="language-button" onclick="setLanguage('he')" aria-label="׳¢׳‘׳¨׳™׳×">׳¢׳‘׳¨׳™׳×</button>
+    <button class="language-button" onclick="setLanguage('en')" aria-label="English">English</button>
+    <button class="language-button" onclick="setLanguage('zh')" aria-label="ה¸­ז–‡">ה¸­ז–‡</button>
+  </div>
+  <div class="container" role="main" aria-label="Barcode Generator">
+    <h1 id="title" aria-live="polite">׳¦׳•׳¨ ׳׳× ׳”׳‘׳¨׳§׳•׳“ ׳©׳׳</h1>
+    <div class="barcode-container">
+      <label for="companyName">׳©׳ ׳”׳—׳‘׳¨׳”:</label>
+      <input type="text" class="barcode-input" id="companyName" placeholder="׳©׳ ׳”׳—׳‘׳¨׳”" aria-label="Company Name" aria-required="true">
 
-    <form id="dateCodeForm">
-        <label for="manufacturer">בחר יצרן:</label>
-        <select id="manufacturer" name="manufacturer">
-            <option value="samsung">SAMSUNG</option>
-            <option value="yageo">YAGEO</option>
-            <option value="viking">VIKING</option>
-            <option value="panasonic">PANASONIC</option>
-            <option value="omron">OMRON</option>
-            <option value="hitano">HITANO</option>
-            <option value="eaton">EATON</option>
-            <option value="hamburg">HAMBURG</option> 
-            <option value="conquer">CONQUER</option>
-            <option value="unisonic">UNISONIC</option>
-            <option value="everlight">EVERLIGHT</option>
-            <option value="gigadevice">GIGADEVICE</option>
-            <option value="bellwether">BELLWETHER</option>
-        </select>
-        <label for="dateCode">הכנס קוד תאריך:</label>
-        <input type="text" id="dateCode" name="dateCode" required>
-        <p id="charCount">מספר התווים: 0</p>
-        <button type="submit">פענח</button>
-        <button type="button" id scanBarcode">סרוק ברקוד</button>
-    </form>
-    <p id="result"></p>
-    <div id="barcode-list"></div>
-    <div id="decodingBoxes"></div>
-    <input type="file" id="imageInput" accept="image/*" style="display:none">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
-    <script>
-        const translations = {
-    he: {
-        title: "מפענח תאריך ייצור",
-        selectManufacturer: "בחר יצרן:",
-        enterDateCode: "הכנס קוד תאריך:",
-        decodeButton: "פענח",
-        scanBarcodeButton: "סרוק ברקוד",
-        charCount: "מספר התווים: ",
-        result: "תוצאה:",
-        decodingBoxes: "פענוח קוד:"
-    },
-    en: {
-        title: "Production Date Decoder",
-        selectManufacturer: "Select Manufacturer:",
-        enterDateCode: "Enter Date Code:",
-        decodeButton: "Decode",
-        scanBarcodeButton: "Scan Barcode",
-        charCount: "Character Count: ",
-        result: "Result:",
-        decodingBoxes: "Decoding Code:"
-    },
-    ar: {
-        title: "مُفسر تاريخ الإنتاج",
-        selectManufacturer: "اختر الشركة المصنعة:",
-        enterDateCode: "أدخل رمز التاريخ:",
-        decodeButton: "فك الترميز",
-        scanBarcodeButton: "مسح الباركود",
-        charCount: "عدد الأحرف: ",
-        result: "النتيجة:",
-        decodingBoxes: "تفكيك الكود:"
-    },
-    fr: {
-        title: "Décodeur de Date de Production",
-        selectManufacturer: "Sélectionner le fabricant:",
-        enterDateCode: "Entrez le code de date:",
-        decodeButton: "Décoder",
-        scanBarcodeButton: "Scanner le code-barres",
-        charCount: "Nombre de caractères: ",
-        result: "Résultat:",
-        decodingBoxes: "Décodage du code:"
-    },
-    es: {
-        title: "Descodificador de Fecha de Producción",
-        selectManufacturer: "Seleccionar fabricante:",
-        enterDateCode: "Introducir código de fecha:",
-        decodeButton: "Descifrar",
-        scanBarcodeButton: "Escanear código de barras",
-        charCount: "Número de caracteres: ",
-        result: "Resultado:",
-        decodingBoxes: "Descodificación del código:"
+      <div>
+        <label for="pnInput" class="barcode-label" id="pnLabel">P/N:</label>
+        <input type="text" class="barcode-input" id="pnInput" placeholder="׳˜׳§׳¡׳˜ ׳‘׳׳•׳×׳™׳•׳× ׳’׳“׳•׳׳•׳×" aria-label="P/N" aria-required="true">
+        <div class="barcode pn-barcode" aria-live="polite" aria-label="Barcode for P/N"></div>
+      </div>
+      <div>
+        <label for="qtyInput" class="barcode-label" id="qtyLabel">QTY:</label>
+        <input type="number" class="barcode-input" id="qtyInput" placeholder="׳׳¡׳₪׳¨׳™׳ ׳‘׳׳‘׳“" aria-label="QTY" aria-required="true">
+        <div class="barcode qty-barcode" aria-live="polite" aria-label="Barcode for QTY"></div>
+      </div>
+      <div>
+        <label for="lotInput" class="barcode-label" id="lotLabel">LOT:</label>
+        <input type="text" class="barcode-input" id="lotInput" placeholder="׳˜׳§׳¡׳˜ ׳‘׳׳•׳×׳™׳•׳× ׳’׳“׳•׳׳•׳×" aria-label="LOT" aria-required="true">
+        <div class="barcode lot-barcode" aria-live="polite" aria-label="Barcode for LOT"></div>
+      </div>
+      <div>
+        <label for="dcInput" class="barcode-label" id="dcLabel">D/C:</label>
+        <input type="text" class="barcode-input" id="dcInput" placeholder="׳×׳׳¨׳™׳ 01.01.2222" aria-label="D/C" aria-required="true">
+        <div class="barcode dc-barcode" aria-live="polite" aria-label="Barcode for D/C"></div>
+      </div>
+    </div>
+    <div class="copy-input">
+      <label for="copy" id="copyLabel">׳׳¡׳₪׳¨ ׳¢׳•׳×׳§׳™׳:</label>
+      <input type="number" id="copy" min="1" value="1" aria-label="Number of Copies" aria-required="true">
+      <button id="copyButton" onclick="generateCopies()">׳¦׳•׳¨ ׳¢׳•׳×׳§׳™׳</button>
+    </div>
+    <div id="copiesContainer" aria-live="polite"></div>
+    <div class="print-button-container">
+      <button class="print-button" onclick="showPreview()" aria-label="Show Preview">׳”׳¦׳’</button>
+    </div>
+  </div>
+
+  <div class="accessibility-toolbar" aria-label="Accessibility Tools">
+    <button class="accessibility-button" id="increaseFont" tabindex="0" onclick="increaseFontSize()">׳”׳’׳“׳ ׳’׳•׳₪׳</button>
+    <button class="accessibility-button" id="decreaseFont" tabindex="0" onclick="decreaseFontSize()">׳”׳§׳˜׳ ׳’׳•׳₪׳</button>
+    <button class="accessibility-button" id="highContrast" tabindex="0" onclick="toggleHighContrast()">׳ ׳™׳’׳•׳“׳™׳•׳× ׳’׳‘׳•׳”׳”</button>
+    <button class="accessibility-button" id="resetAccessibility" tabindex="0" onclick="resetAccessibility()">׳׳™׳₪׳•׳¡</button>
+  </div>
+
+  <script>
+    let isHighContrast = false;
+    let currentLanguage = 'he';
+
+    const translations = {
+      en: {
+        title: "Create Your Barcode",
+        companyName: "Company Name",
+        companyLabel: "Company Name:",
+        pnLabel: "P/N:",
+        qtyLabel: "QTY:",
+        lotLabel: "LOT:",
+        dcLabel: "D/C:",
+        pnInput: "Text in uppercase",
+        qtyInput: "Numbers only",
+        lotInput: "Text in uppercase",
+        dcInput: "Date 01.01.2222",
+        copyLabel: "Number of Copies:",
+        copyButton: "Create Copies",
+        printButton: "Print",
+        showButton: "Show",
+        invalidQty: "Please enter a valid number for quantity",
+        invalidDate: "Please enter a valid date format (DD.MM.YYYY)",
+        increaseFont: "Increase Font",
+        decreaseFont: "Decrease Font",
+        highContrast: "High Contrast",
+        resetAccessibility: "Reset"
+      },
+      he: {
+        title: "׳¦׳•׳¨ ׳׳× ׳”׳‘׳¨׳§׳•׳“ ׳©׳׳",
+        companyName: "׳©׳ ׳”׳—׳‘׳¨׳”",
+        companyLabel: "׳©׳ ׳”׳—׳‘׳¨׳”:",
+        pnLabel: "P/N:",
+        qtyLabel: "QTY:",
+        lotLabel: "LOT:",
+        dcLabel: "D/C:",
+        pnInput: "׳˜׳§׳¡׳˜ ׳‘׳׳•׳×׳™׳•׳× ׳’׳“׳•׳׳•׳×",
+        qtyInput: "׳׳¡׳₪׳¨׳™׳ ׳‘׳׳‘׳“",
+        lotInput: "׳˜׳§׳¡׳˜ ׳‘׳׳•׳×׳™׳•׳× ׳’׳“׳•׳׳•׳×",
+        dcInput: "׳×׳׳¨׳™׳ 01.01.2222",
+        copyLabel: "׳׳¡׳₪׳¨ ׳¢׳•׳×׳§׳™׳:",
+        copyButton: "׳¦׳•׳¨ ׳¢׳•׳×׳§׳™׳",
+        printButton: "׳”׳“׳₪׳¡",
+        showButton: "׳”׳¦׳’",
+        invalidQty: "׳ ׳ ׳׳”׳–׳™׳ ׳׳¡׳₪׳¨ ׳×׳§׳™׳ ׳׳›׳׳•׳×",
+        invalidDate: "׳ ׳ ׳׳”׳–׳™׳ ׳×׳׳¨׳™׳ ׳‘׳₪׳•׳¨׳׳˜ ׳×׳§׳™׳ (DD.MM.YYYY)",
+        increaseFont: "׳”׳’׳“׳ ׳’׳•׳₪׳",
+        decreaseFont: "׳”׳§׳˜׳ ׳’׳•׳₪׳",
+        highContrast: "׳ ׳™׳’׳•׳“׳™׳•׳× ׳’׳‘׳•׳”׳”",
+        resetAccessibility: "׳׳™׳₪׳•׳¡"
+      },
+      zh: {
+        title: "וˆ›ו»÷ז‚¨ח„ז¡ו½¢ח ",
+        companyName: "ו…¬ו¸וח§°",
+        companyLabel: "ו…¬ו¸וח§°:",
+        pnLabel: "P/N:",
+        qtyLabel: "QTY:",
+        lotLabel: "LOT:",
+        dcLabel: "D/C:",
+        pnInput: "ו₪§ו†™ו­—ז¯",
+        qtyInput: "ה»…י™ז•°ו­—",
+        lotInput: "ו₪§ו†™ו­—ז¯",
+        dcInput: "ז—¥ז 01.01.2222",
+        copyLabel: "ו‰¯ז¬ז•°י‡:",
+        copyButton: "וˆ›ו»÷ו‰¯ז¬",
+        printButton: "ז‰“ו°",
+        showButton: "ז˜¾ח₪÷",
+        invalidQty: "ט¯·ט¾“ו…¥ז‰ז•ˆח„ז•°י‡",
+        invalidDate: "ט¯·ט¾“ו…¥ז‰ז•ˆח„ז—¥זז ¼ו¼ (DD.MM.YYYY)",
+        increaseFont: "ו¢ו₪§ו­—ה½“",
+        decreaseFont: "ו‡ו°ו­—ה½“",
+        highContrast: "י«˜ו¯¹ז¯”ו÷¦",
+        resetAccessibility: "י‡ח½®"
+      }
+    };
+
+    const elements = {
+      companyName: document.getElementById("companyName"),
+      pnInput: document.getElementById("pnInput"),
+      qtyInput: document.getElementById("qtyInput"),
+      lotInput: document.getElementById("lotInput"),
+      dcInput: document.getElementById("dcInput"),
+      copiesContainer: document.getElementById("copiesContainer"),
+      copyInput: document.getElementById("copy"),
+      increaseFont: document.getElementById("increaseFont"),
+      decreaseFont: document.getElementById("decreaseFont"),
+      highContrast: document.getElementById("highContrast"),
+      resetAccessibility: document.getElementById("resetAccessibility")
+    };
+
+    function debounce(func, wait) {
+      let timeout;
+      return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+      };
     }
-};
 
+    function sanitizeInput(input) {
+      return input.replace(/</g, '<').replace(/>/g, '>');
+    }
 
-        // Character count update
-        document.getElementById('dateCode').addEventListener('input', function() {
-            const charCount = this.value.length;
-            document.getElementById('charCount').innerText = `מספר התווים: ${charCount}`;
-        });
+    function setLanguage(language) {
+      currentLanguage = language;
+      localStorage.setItem('language', language);
+      document.getElementById("title").innerText = translations[language].title;
+      document.querySelector("label[for='companyName']").textContent = translations[language].companyLabel;
+      elements.companyName.placeholder = translations[language].companyName;
+      document.getElementById("pnLabel").innerText = translations[language].pnLabel;
+      document.getElementById("qtyLabel").innerText = translations[language].qtyLabel;
+      document.getElementById("lotLabel").innerText = translations[language].lotLabel;
+      document.getElementById("dcLabel").innerText = translations[language].dcLabel;
+      elements.pnInput.placeholder = translations[language].pnInput;
+      elements.qtyInput.placeholder = translations[language].qtyInput;
+      elements.lotInput.placeholder = translations[language].lotInput;
+      elements.dcInput.placeholder = translations[language].dcInput;
+      document.getElementById("copyLabel").innerText = translations[language].copyLabel;
+      document.getElementById("copyButton").innerText = translations[language].copyButton;
+      document.querySelector(".print-button").innerText = translations[language].showButton;
+      // Update accessibility buttons
+      elements.increaseFont.innerText = translations[language].increaseFont;
+      elements.decreaseFont.innerText = translations[language].decreaseFont;
+      elements.highContrast.innerText = translations[language].highContrast;
+      elements.resetAccessibility.innerText = translations[language].resetAccessibility;
+    }
 
-        // BELLWETHER decoding function
-        function decodeBellwether(dateCode) {
-            if (dateCode.length === 5 || dateCode.length === 9) {
-                const yearCode = dateCode.charAt(0);
-                const monthCode = dateCode.charAt(1).toLowerCase();
-                const year = 2020 + parseInt(yearCode, 10);
-                const monthMap = {
-                    'a': '01', 'b': '02', 'c': '03', 'd': '04', 'e': '05',
-                    'f': '06', 'g': '07', 'h': '08', 'i': '09', 'j': '10',
-                    'k': '11', 'n': '12'
-                };
-                const month = monthMap[monthCode];
-                if (year && month) {
-                    return { year, month };
-                }
+    function updateBarcode(inputId, barcodeClass) {
+      const input = elements[inputId];
+      const barcodeDiv = document.querySelector(`.${barcodeClass}`);
+      barcodeDiv.innerText = `*${sanitizeInput(input.value)}*`;
+    }
+
+    const debouncedGenerateBarcodes = debounce(() => {
+      updateBarcode('pnInput', 'pn-barcode');
+      updateBarcode('qtyInput', 'qty-barcode');
+      updateBarcode('lotInput', 'lot-barcode');
+      updateBarcode('dcInput', 'dc-barcode');
+    }, 300);
+
+    function createBarcodeElement(labelText, barcodeText, enteredText) {
+      return `
+        <div class="barcode-element">
+          <div class="label-and-text">
+            <span class="barcode-label">${labelText}</span>
+            <span class="entered-text">${sanitizeInput(enteredText)}</span>
+          </div>
+          <div class="barcode">${barcodeText}</div>
+        </div>
+      `;
+    }
+
+    function generateCopies() {
+      const numCopies = parseInt(elements.copyInput.value);
+      if (isNaN(numCopies) || numCopies < 1) {
+        alert(translations[currentLanguage].invalidQty);
+        return;
+      }
+
+      const values = {
+        company: elements.companyName.value,
+        pn: elements.pnInput.value,
+        qty: elements.qtyInput.value,
+        lot: elements.lotInput.value,
+        dc: elements.dcInput.value
+      };
+
+      if (!isValidNumber(values.qty)) {
+        alert(translations[currentLanguage].invalidQty);
+        return;
+      }
+
+      if (!isValidDate(values.dc)) {
+        alert(translations[currentLanguage].invalidDate);
+        return;
+      }
+
+      let html = '';
+      for (let i = 0; i < numCopies; i++) {
+        html += `
+          <div class="frame" role="region" aria-label="Barcode Copy ${i + 1}">
+            <div class="company-name">${sanitizeInput(values.company)}</div>
+            ${createBarcodeElement(translations[currentLanguage].pnLabel, `*${values.pn}*`, values.pn)}
+            ${createBarcodeElement(translations[currentLanguage].qtyLabel, `*${values.qty}*`, values.qty)}
+            ${createBarcodeElement(translations[currentLanguage].lotLabel, `*${values.lot}*`, values.lot)}
+            ${createBarcodeElement(translations[currentLanguage].dcLabel, `*${values.dc}*`, values.dc)}
+          </div>
+        `;
+      }
+      elements.copiesContainer.innerHTML = html;
+    }
+
+    function isValidNumber(value) {
+      return /^\d+$/.test(value);
+    }
+
+    function isValidDate(value) {
+      const datePattern = /^\d{2}\.\d{2}\.\d{4}$/;
+      return datePattern.test(value);
+    }
+
+    function showPreview() {
+      const previewWindow = window.open("", "_blank");
+      const htmlContent = elements.copiesContainer.innerHTML;
+      const printButtonLabel = translations[currentLanguage].printButton;
+      const isHighContrastClass = isHighContrast ? 'high-contrast' : '';
+
+      previewWindow.document.write(`
+        <html>
+        <head>
+          <title>Preview</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 0;
+              padding: 0;
+              background-color: #f4f4f9;
+              transition: background-color 0.3s, color 0.3s;
             }
-            return null;
-        }
-
-        // Unified decodeDate function
-        function decodeDate(manufacturer, dateCode) {
-            let result = '';
-            if (manufacturer === 'bellwether') {
-                const decodedDate = decodeBellwether(dateCode);
-                result = decodedDate ? `תאריך ייצור: ${decodedDate.month}-${decodedDate.year}` : 'פורמט תאריך לא חוקי עבור BELLWETHER.';
-            } else if (manufacturer === 'gigadevice') {
-                const decodedDate = decodeGigaDevice(dateCode);
-                result = decodedDate ? `תאריך ייצור: ${decodedDate.month}-${decodedDate.year}` : 'פורמט תאריך לא חוקי עבור GIGADEVICE.';
-            } else if (manufacturer === 'eaton') {
-                const decodedDate = decodeEaton(dateCode);
-                result = decodedDate ? `תאריך ייצור: חודש ${decodedDate.month}, ${decodedDate.year}` : 'פורמט תאריך לא חוקי עבור EATON.';
-            } else if (manufacturer === 'panasonic') {
-                // Panasonic logic from original code
-                if (dateCode.length === 23) {
-                    const yearCode = dateCode.charAt(5);
-                    const monthCode = dateCode.charAt(6);
-                    const year = 2020 + parseInt(yearCode, 10);
-                    const monthMap = {
-                        '1': '01', '2': '02', '3': '03', '4': '04', '5': '05',
-                        '6': '06', '7': '07', '8': '08', '9': '09', '0': '10',
-                        'O': '10', 'N': '11', 'D': '12'
-                    };
-                    const month = monthMap[monthCode];
-                    result = (year && month) ? `תאריך ייצור: ${month}-${year}` : 'פורמט תאריך לא חוקי עבור PANASONIC.';
-                } else if (dateCode.length === 12) {
-                    const yearCode = dateCode.charAt(1);
-                    const monthCode = dateCode.charAt(2);
-                    const year = 2020 + parseInt(yearCode, 10);
-                    const monthMap = {
-                        '1': '01', '2': '02', '3': '03', '4': '04', '5': '05',
-                        '6': '06', '7': '07', '8': '08', '9': '09', '0': '10',
-                        'O': '10', 'N': '11', 'D': '12'
-                    };
-                    const month = monthMap[monthCode];
-                    result = (year && month) ? `תאריך ייצור: ${month}-${year}` : 'פורמט תאריך לא חוקי עבור PANASONIC.';
-                } else if ([4, 5, 6, 7, 8].includes(dateCode.length)) {
-                    const yearCode = dateCode.charAt(dateCode.length === 4 ? 0 : dateCode.length === 5 ? 0 : dateCode.length === 6 ? 0 : 2);
-                    const weekCode = dateCode.length === 4 ? dateCode.charAt(1) : dateCode.substring(dateCode.length === 5 ? 1 : 3, dateCode.length === 5 ? 3 : 5);
-                    const decoded = dateCode.length === 4 ? decodePanasonicMonth(yearCode, weekCode) : decodePanasonicWeek(yearCode, weekCode);
-                    result = decoded ? `תאריך ייצור: חודש ${decoded.month}, ${decoded.year}` : 'פורמט תאריך לא חוקי עבור PANASONIC.';
-                } else {
-                    result = 'פורמט תאריך לא חוקי עבור PANASONIC.';
-                }
-            } else if (manufacturer === 'samsung') {
-                const match = dateCode.match(/^.(.)(.)(.)/);
-                if (match) {
-                    const yearCode = match[1];
-                    const monthCode = match[2];
-                    const dayCode = match[3];
-                    const yearMap = {
-                        'K': '2024', 'L': '2025', 'M': '2026', 'N': '2027', 'O': '2029', 'P': '2030',
-                        'Q': '2004', 'R': '2005', 'S': '2006', 'T': '2007', 'U': '2008',
-                        'V': '2009', 'W': '2010', 'X': '2011', 'Y': '2012', 'Z': '2013',
-                        'A': '2014', 'B': '2015', 'C': '2016', 'D': '2017', 'E': '2018',
-                        'F': '2019', 'G': '2020', 'H': '2021', 'I': '2022', 'J': '2023'
-                    };
-                    const monthMap = {
-                        '1': '01', '2': '02', '3': '03', '4': '04', '5': '05', '6': '06',
-                        '7': '07', '8': '08', '9': '09', 'A': '10', 'B': '11', 'C': '12'
-                    };
-                    const dayMap = {
-                        '1': '01', '2': '02', '3': '03', '4': '04', '5': '05', '6': '06',
-                        '7': '07', '8': '08', '9': '09', 'A': '10', 'B': '11', 'C': '12',
-                        'D': '13', 'E': '14', 'F': '15', 'G': '16', 'H': '17', 'I': '18',
-                        'J': '19', 'K': '20', 'L': '21', 'M': '22', 'N': '23', 'O': '24',
-                        'P': '25', 'Q': '26', 'R': '27', 'S': '28', 'T': '29', 'U': '30',
-                        'V': '31'
-                    };
-                    const year = yearMap[yearCode] || 'שנה לא ידועה';
-                    const month = monthMap[monthCode] || 'חודש לא ידוע';
-                    const day = dayMap[dayCode] || 'יום לא ידוע';
-                    result = (year !== 'שנה לא ידועה' && month !== 'חודש לא ידוע' && day !== 'יום לא ידוע') ? `תאריך ייצור: ${day}-${month}-${year}` : 'פורמט תאריך לא חוקי עבור SAMSUNG.';
-                } else {
-                    result = 'פורמט תאריך לא חוקי עבור SAMSUNG.';
-                }
-            } else if (manufacturer === 'yageo') {
-                if (dateCode.length === 4) {
-                    const yearCode = dateCode.substring(0, 2);
-                    const weekCode = dateCode.substring(2, 4);
-                    const decoded = decodeYageoWeek(yearCode, weekCode);
-                    result = `תאריך ייצור: חודש ${decoded.month}, ${decoded.year}`;
-                } else {
-                    result = 'פורמט תאריך לא חוקי עבור YAGEO.';
-                }
-            } else if (manufacturer === 'viking') {
-                if (dateCode.length === 6) {
-                    const year = '20' + dateCode.substring(0, 2);
-                    const month = dateCode.substring(2, 4);
-                    const day = dateCode.substring(4, 6);
-                    result = `תאריך ייצור: ${day}-${month}-${year}`;
-                } else {
-                    result = 'פורמן תאריך לא חוקי עבור VIKING.';
-                }
-            } else if (manufacturer === 'everlight') {
-                if (dateCode.length === 19) {
-                    const year = `20${dateCode.substring(1, 3)}`;
-                    const month = dateCode.substring(3, 5);
-                    const day = dateCode.substring(5, 7);
-                    if (parseInt(month) >= 1 && parseInt(month) <= 12 && parseInt(day) >= 1 && parseInt(day) <= 31) {
-                        result = `תאריך ייצור: ${day}/${month}/${year}`;
-                    } else {
-                        result = 'תאריך לא תקין עבור EVERLIGHT.';
-                    }
-                } else {
-                    result = 'קוד תאריך לא חוקי (לא מכיל 19 תווים).';
-                }
-            } else if (manufacturer === 'omron') {
-                if (dateCode.length === 2) {
-                    const monthCode = dateCode.charAt(0);
-                    const yearCode = dateCode.charAt(1);
-                    const monthMap = {
-                        '1': '01', '2': '02', '3': '03', '4': '04', '5': '05', '6': '06',
-                        '7': '07', '8': '08', '9': '09', 'X': '10', 'Y': '11', 'Z': '12'
-                    };
-                    const year = `202${yearCode}`;
-                    const month = monthMap[monthCode];
-                    result = (year && month) ? `תאריך ייצור: ${month}-${year}` : 'פורמט תאריך לא חוקי עבור OMRON.';
-                } else if (dateCode.length === 3) {
-                    const dayCode = dateCode.charAt(0);
-                    const monthCode = dateCode.charAt(1);
-                    const yearCode = dateCode.charAt(2);
-                    const dayMap = {
-                        '1': '01', '2': '02', '3': '03', '4': '04', '5': '05', '6': '06',
-                        '7': '07', '8': '08', '9': '09',
-                        'A': '10', 'B': '11', 'C': '12', 'D': '13', 'E': '14', 'F': '15',
-                        'G': '16', 'H': '17', 'J': '18', 'K': '19', 'L': '20', 'M': '21',
-                        'N': '22', 'P': '23', 'R': '24', 'S': '25', 'T': '26', 'U': '27',
-                        'V': '28', 'W': '29', 'X': '30', 'Y': '31'
-                    };
-                    const monthMap = {
-                        '1': '01', '2': '02', '3': '03', '4': '04', '5': '05', '6': '06',
-                        '7': '07', '8': '08', '9': '09', 'X': '10', 'Y': '11', 'Z': '12'
-                    };
-                    const year = `202${yearCode}`;
-                    const month = monthMap[monthCode];
-                    const day = dayMap[dayCode];
-                    result = (year && month && day) ? `DIP SWITCH AND OPTO SWITCH תאריך ייצור: ${day}-${month}-${year}` : 'פורמט תאריך לא חוקי עבור OMRON.';
-                } else if ([6, 7].includes(dateCode.length)) {
-                    const day = dateCode.substring(0, 2);
-                    const monthCode = dateCode.charAt(2);
-                    const yearCode = dateCode.charAt(3);
-                    const monthMap = {
-                        '1': '01', '2': '02', '3': '03', '4': '04', '5': '05', '6': '06',
-                        '7': '07', '8': '08', '9': '09', 'X': '10', 'Y': '11', 'Z': '12'
-                    };
-                    const year = 2020 + parseInt(yearCode, 10);
-                    const month = monthMap[monthCode];
-                    result = (year && month && parseInt(day) >= 1 && parseInt(day) <= 31) ? `תאריך ייצור: ${day}-${month}-${year}` : 'פורמט תאריך לא חוקי עבור OMRON.';
-                } else if (dateCode.length === 12) {
-                    const yearCode = dateCode.charAt(1);
-                    const monthCode = dateCode.charAt(2);
-                    const yearMap = {
-                        '1': 2021, '2': 2022, '3': 2023, '4': 2024, '5': 2025,
-                        '6': 2026, '7': 2027, '8': 2028, '9': 2029
-                    };
-                    const monthMap = {
-                        '1': '01', '2': '02', '3': '03', '4': '04', '5': '05', '6': '06',
-                        '7': '07', '8': '08', '9': '09', 'O': '10', 'N': '11', 'D': '12'
-                    };
-                    const year = yearMap[yearCode];
-                    const month = monthMap[monthCode];
-                    result = (year && month) ? `תאריך ייצור: ${month}/${year}` : 'פורמט תאריך לא חוקי עבור OMRON.';
-                } else {
-                    result = 'פורמט תאריך לא חוקי עבור OMRON.';
-                }
-            } else if (manufacturer === 'hitano') {
-                const decodedDate = decodeHitano(dateCode);
-                result = (decodedDate && decodedDate.month && decodedDate.day) ? `תאריך ייצור: ${decodedDate.day}-${decodedDate.month}-${decodedDate.year}` : 'פורמט תאריך לא חוקי עבור HITANO.';
-            } else if (manufacturer === 'conquer') {
-                if (dateCode.length === 9) {
-                    const yearCode = dateCode.charAt(3);
-                    const monthCode = dateCode.substring(4, 6);
-                    const year = 2020 + parseInt(yearCode);
-                    const month = monthCode.padStart(2, '0');
-                    result = (parseInt(month) >= 1 && parseInt(month) <= 12) ? `תאריך ייצור: ${month}-${year}` : 'פורמט תאריך לא חוקי עבור CONQUER.';
-                } else if (dateCode.length === 31 && dateCode.includes('*')) {
-                    const datePart = dateCode.split('*').pop();
-                    if (datePart && datePart.length === 6) {
-                        const year = '20' + datePart.substring(0, 2);
-                        const month = datePart.substring(2, 4);
-                        const day = datePart.substring(4, 6);
-                        result = (parseInt(month) >= 1 && parseInt(month) <= 12 && parseInt(day) >= 1 && parseInt(day) <= 31) ? `תאריך ייצור: ${day}-${month}-${year}` : 'פורמט תאריך לא חוקי עבור CONQUER.';
-                    } else {
-                        result = 'פורמט תאריך לא חוקי עבור CONQUER.';
-                    }
-                } else if (dateCode.length === 10 && dateCode.startsWith('S')) {
-                    const year = '20' + dateCode.substring(4, 6);
-                    const month = dateCode.substring(6, 8);
-                    const day = dateCode.substring(8, 10);
-                    result = (parseInt(month) >= 1 && parseInt(month) <= 12 && parseInt(day) >= 1 && parseInt(day) <= 31) ? `תאריך ייצור: ${day}-${month}-${year}` : 'פורמן תאריך לא חוקי עבור CONQUER.';
-                } else if (dateCode.length === 10 && /^[A-Z0-9]{3}[0-9]{7}$/.test(dateCode)) {
-                    const yearCode = dateCode.charAt(3);
-                    const monthCode = dateCode.substring(4, 6);
-                    const year = 2020 + parseInt(yearCode);
-                    const month = monthCode.padStart(2, '0');
-                    result = (parseInt(month) >= 1 && parseInt(month) <= 12) ? `תאריך ייצור: ${month}-${year}` : 'פורמט תאריך לא חוקי עבור CONQUER.';
-                } else {
-                    result = 'פורמט תאריך לא חוקי עבור CONQUER.';
-                }
-            } else if (manufacturer === 'unisonic') {
-                if (dateCode.length === 4) {
-                    const yearCode = dateCode.charAt(0);
-                    const monthCode = dateCode.charAt(1);
-                    const yearMap = {
-                        'N': '2020', 'O': '2021', 'P': '2022', 'Q': '2023', 'R': '2024',
-                        'S': '2025', 'T': '2026', 'U': '2027', 'V': '2028', 'W': '2029'
-                    };
-                    const monthMap = {
-                        'A': '01', 'B': '02', 'C': '03', 'D': '04', 'E': '05', 'F': '06',
-                        'G': '07', 'H': '08', 'J': '09', 'K': '10', 'L': '11', 'M': '12'
-                    };
-                    const year = yearMap[yearCode];
-                    const month = monthMap[monthCode];
-                    result = (year && month) ? `תאריך ייצור: ${month}-${year}` : 'פורמט תאריך לא חוקי עבור UNISONIC.';
-                } else {
-                    result = 'פורמט תאריך לא חוקי עבור UNISONIC.';
-                }
-            } else {
-                result = 'יצרן לא ידוע.';
+            body.high-contrast {
+              background-color: #000;
+              color: #fff;
             }
-            return result;
-        }
-
-        // Original decoding functions
-        function decodeEaton(dateCode) {
-            if (dateCode.length === 3) {
-                const yearMap = {
-                    'A': 2017, 'B': 2018, 'C': 2019, 'D': 2020,
-                    'E': 2021, 'F': 2022, 'G': 2023, 'H': 2024,
-                    'J': 2025, 'K': 2026, 'L': 2027, 'M': 2028,
-                    'N': 2029
-                };
-                const year = yearMap[dateCode.charAt(0)];
-                const week = parseInt(dateCode.substring(1, 3), 10);
-                const month = Math.min(Math.ceil(week / 4), 12);
-                if (year && week >= 1 && week <= 52) {
-                    return { year, month };
-                }
+            .frame {
+              border: 1px solid #ccc;
+              display: inline-block;
+              padding: 1em;
+              margin: 1em;
+              text-align: center;
+              vertical-align: top;
+              background: #fff;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+              border-radius: 5px;
+              transition: background-color 0.3s, color 0.3s, border-color 0.3s;
             }
-            return null;
-        }
-
-        function decodePanasonicWeek(yearCode, weekCode) {
-            const year = 2020 + parseInt(yearCode, 10);
-            const week = parseInt(weekCode, 10);
-            const month = Math.min(Math.ceil(week / 4), 12);
-            return { year, month };
-        }
-
-        function decodePanasonicMonth(yearCode, monthCode) {
-            const year = 2020 + parseInt(yearCode, 10);
-            const month = parseInt(monthCode, 10);
-            return { year, month };
-        }
-
-        function decodeGigaDevice(dateCode) {
-            if (dateCode.length === 6) {
-                const year = '20' + dateCode.substring(2, 4);
-                const week = parseInt(dateCode.substring(4, 6), 10);
-                if (week >= 1 && week <= 52) {
-                    const firstDayOfYear = new Date(year, 0, 1);
-                    const dayOfWeek = firstDayOfYear.getDay();
-                    const daysToAdd = (week - 1) * 7 - dayOfWeek + 1;
-                    const productionDate = new Date(firstDayOfYear.setDate(firstDayOfYear.getDate() + daysToAdd));
-                    const month = String(productionDate.getMonth() + 1).padStart(2, '0');
-                    return { month, year };
-                }
+            body.high-contrast .frame {
+              background-color: #222;
+              color: #fff;
+              border-color: #666;
+              box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
             }
-            return null;
-        }
-
-        function decodeHitano(dateCode) {
-            const monthMap = {
-                'A': '01', 'B': '02', 'C': '03', 'D': '04', 'E': '05',
-                'F': '06', 'G': '07', 'H': '08', 'I': '09', 'J': '10',
-                'K': '11', 'L': '12'
-            };
-            let year, month, day;
-            if (dateCode.length === 12) {
-                year = 2000 + parseInt(dateCode.substring(4, 6), 10);
-                month = monthMap[dateCode.charAt(6)];
-                day = dateCode.substring(7, 9);
-            } else if (dateCode.length === 15) {
-                year = parseInt(dateCode.substring(1, 5), 10);
-                month = dateCode.substring(5, 7);
-                day = dateCode.substring(7, 9);
-            } else {
-                return null;
+            .company-name {
+              font-weight: bold;
+              font-size: 1.2em;
+              margin-bottom: 0.5em;
+              transition: color 0.3s;
             }
-            return { year, month, day };
-        }
-
-        function decodeYageoWeek(yearCode, weekCode) {
-            const year = '20' + yearCode;
-            const week = parseInt(weekCode, 10);
-            const month = Math.min(Math.ceil(week / 4), 12);
-            return { year, month };
-        }
-
-        // Decoding boxes map
-        const decodingMap = {
-            yageo: {
-                lengths: {
-                    4: {
-                        map: {
-                            1: 'Year',
-                            2: 'Year',
-                            3: 'Week',
-                            4: 'Week'
-                        }
-                    }
-                }
-            },
-            omron: {
-                lengths: {
-                    6: {
-                        map: {
-                            1: 'Day',
-                            2: 'Day',
-                            3: 'Month',
-                            4: 'Year'
-                        }
-                    },
-                    7: {
-                        map: {
-                            1: 'Day',
-                            2: 'Day',
-                            3: 'Month',
-                            4: 'Year'
-                        }
-                    },
-                    12: {
-                        map: {
-                            2: 'Year',
-                            3: 'Month'
-                        }
-                    }
-                }
-            },
-            hitano: {
-                lengths: {
-                    12: {
-                        map: {
-                            5: 'Year',
-                            6: 'Year',
-                            7: 'Month',
-                            8: 'Day',
-                            9: 'Day'
-                        }
-                    }
-                }
-            },
-            eaton: {
-                lengths: {
-                    3: {
-                        map: {
-                            1: 'Year',
-                            2: 'Week',
-                            3: 'Week'
-                        }
-                    }
-                }
-            },
-            gigadevice: {
-                lengths: {
-                    6: {
-                        map: {
-                            3: 'Year',
-                            4: 'Year',
-                            5: 'Week',
-                            6: 'Week'
-                        }
-                    }
-                }
-            },
-            conquer: {
-                lengths: {
-                    9: {
-                        map: {
-                            4: 'Year',
-                            5: 'Month',
-                            6: 'Month'
-                        }
-                    },
-                    10: {
-                        map: {
-                            4: 'Year',
-                            5: 'Month',
-                            6: 'Month'
-                        }
-                    }
-                }
-            },
-            samsung: {
-                lengths: {
-                    7: {
-                        map: {
-                            2: 'Year',
-                            3: 'Month',
-                            4: 'Day'
-                        }
-                    }
-                }
-            },
-            panasonic: {
-                lengths: {
-                    23: {
-                        map: {
-                            6: 'Year',
-                            7: 'Month'
-                        }
-                    },
-                    12: {
-                        map: {
-                            2: 'Year',
-                            3: 'Month'
-                        }
-                    },
-                    4: {
-                        map: {
-                            1: 'Year',
-                            2: 'Month'
-                        }
-                    }
-                }
-            },
-            bellwether: {
-                lengths: {
-                    5: {
-                        map: {
-                            1: 'Year',
-                            2: 'Month'
-                        }
-                    },
-                    9: {
-                        map: {
-                            1: 'Year',
-                            2: 'Month'
-                        }
-                    }
-                }
+            body.high-contrast .company-name {
+              color: #fff;
             }
-        };
-
-        function showDecodingBoxesNew(dateCode, supplier) {
-            const existingContainer = document.getElementById("decodingBoxes");
-            existingContainer.innerHTML = "";
-            const supplierConfig = decodingMap[supplier];
-            if (!supplierConfig) {
-                const message = document.createElement("p");
-                message.textContent = "אין מיפוי זמין להצגת מבנה הפענוח.";
-                existingContainer.appendChild(message);
-                return;
+            .barcode-element {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              margin-bottom: 1em;
             }
-            const lengthConfig = supplierConfig.lengths[dateCode.length];
-            if (!lengthConfig) {
-                const message = document.createElement("p");
-                message.textContent = `אין פענוח למספר תווים ${dateCode.length} עבור ספק זה.`;
-                existingContainer.appendChild(message);
-                return;
+            .barcode-label {
+              font-weight: bold;
+              margin-bottom: 0.5em;
+              text-align: center;
+              transition: color 0.3s;
             }
-            const map = lengthConfig.map;
-            for (let i = 1; i <= dateCode.length; i++) {
-                const char = dateCode[i - 1];
-                const label = map[i] || '';
-                const box = document.createElement("div");
-                box.innerHTML = `
-                    <div style="font-size: 18px; font-weight: bold;">${char}</div>
-                    <small style="font-size: 12px; color: gray;">${label}</small>
-                `;
-                box.style.border = "1px solid black";
-                box.style.padding = "10px";
-                box.style.margin = "5px";
-                box.style.textAlign = "center";
-                box.style.width = "35px";
-                box.style.height = "40px";
-                box.style.display = "flex";
-                box.style.flexDirection = "column";
-                box.style.justifyContent = "center";
-                box.style.alignItems = "center";
-                box.style.backgroundColor = "#f9f9f9";
-                existingContainer.appendChild(box);
+            body.high-contrast .barcode-label {
+              color: #fff;
             }
-        }
-
-        // Form submission
-        document.getElementById('dateCodeForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const supplier = document.getElementById('manufacturer').value;
-            const dateCode = document.getElementById('dateCode').value.trim();
-            if (window.innerWidth >= 768) {
-                showDecodingBoxesNew(dateCode, supplier);
+            .entered-text {
+              text-align: center;
+              margin-bottom: 0.5em;
+              transition: color 0.3s;
             }
-            const result = decodeDate(supplier, dateCode);
-            document.getElementById('result').innerHTML = result;
-        });
-
-        // Language handling
-        document.getElementById("language").addEventListener("change", function() {
-            const selectedLanguage = this.value;
-            localStorage.setItem("selectedLanguage", selectedLanguage);
-            updateLanguage(selectedLanguage);
-        });
-
-        document.addEventListener("DOMContentLoaded", function() {
-            const languageSelect = document.getElementById("language");
-            const savedLanguage = localStorage.getItem("selectedLanguage") || "he";
-            languageSelect.value = savedLanguage;
-            updateLanguage(savedLanguage);
-            const selectedOption = languageSelect.options[languageSelect.selectedIndex];
-            if (selectedOption) {
-                selectedOption.selected = true;
+            body.high-contrast .entered-text {
+              color: #fff;
             }
-        });
-
-        function updateLanguage(language) {
-            const elementsToTranslate = {
-                title: document.querySelector("h1"),
-                selectManufacturer: document.querySelector("label[for='manufacturer']"),
-                enterDateCode: document.querySelector("label[for='dateCode']"),
-                decodeButton: document.querySelector("button[type='submit']"),
-                scanBarcodeButton: document.getElementById("scanBarcode"),
-                charCount: document.getElementById("charCount"),
-                result: document.getElementById("result")
-            };
-            const currentTranslations = translations[language];
-            for (let key in elementsToTranslate) {
-                if (elementsToTranslate[key]) {
-                    elementsToTranslate[key].innerText = currentTranslations[key] || "";
-                }
+            .barcode {
+              font-family: 'Libre Barcode 39', cursive;
+              font-size: 48px;
+              width: 100%;
+              text-align: center;
+              transition: color 0.3s;
             }
-            document.body.style.direction = language === "he" || language === "ar" ? "rtl" : "ltr";
-        }
-
-        // Barcode scanning
-        document.getElementById('scanBarcode').addEventListener('click', function() {
-            document.getElementById('imageInput').click();
-        });
-
-        document.getElementById('imageInput').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.onload = function() {
-                        Quagga.decodeSingle({
-                            src: img.src,
-                            numOfWorkers: 0,
-                            inputStream: {
-                                size: 800
-                            },
-                            decoder: {
-                                readers: ["code_128_reader", "code_39_reader"]
-                            },
-                        }, function(result) {
-                            if (result && result.codeResult) {
-                                const barcode = result.codeResult.code;
-                                document.getElementById('dateCode').value = barcode;
-                                document.getElementById('result').innerText = `ברקוד מזוהה: ${barcode}`;
-                            } else {
-                                document.getElementById('result').innerText = "לא זוהה ברקוד. נסה שוב.";
-                            }
-                        });
-                    };
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
+            body.high-contrast .barcode {
+              color: #fff;
             }
-        });
-    </script>
+            .print-button {
+              font-size: 1.2em;
+              padding: 0.5em 1em;
+              background: #007bff;
+              color: #fff;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+              transition: background 0.3s ease;
+              margin-top: 2em;
+              display: block;
+            }
+            .print-button:hover {
+              background: #0056b3;
+            }
+            .print-button-container {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 100%;
+              position: fixed;
+              bottom: 20px;
+            }
+            @media print {
+              .print-button-container {
+                display: none;
+              }
+            }
+          </style>
+          <link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+39&display=swap" rel="stylesheet">
+        </head>
+        <body class="${isHighContrastClass}">
+          ${htmlContent}
+          <div class="print-button-container">
+            <button class="print-button" onclick="window.print()">${printButtonLabel}</button>
+          </div>
+        </body>
+        </html>
+      `);
+      previewWindow.document.close();
+    }
+
+    function increaseFontSize() {
+      document.body.style.fontSize = "1.2em";
+      localStorage.setItem('fontSize', '1.2em');
+    }
+
+    function decreaseFontSize() {
+      document.body.style.fontSize = "0.8em";
+      localStorage.setItem('fontSize', '0.8em');
+    }
+
+    function toggleHighContrast() {
+      isHighContrast = !isHighContrast;
+      document.body.classList.toggle('high-contrast', isHighContrast);
+      localStorage.setItem('highContrast', isHighContrast);
+    }
+
+    function resetAccessibility() {
+      document.body.style.fontSize = "";
+      document.body.classList.remove('high-contrast');
+      isHighContrast = false;
+      localStorage.removeItem('fontSize');
+      localStorage.setItem('highContrast', false);
+    }
+
+    // Initialize
+    window.onload = () => {
+      const savedLang = localStorage.getItem('language') || 'he';
+      setLanguage(savedLang);
+      isHighContrast = localStorage.getItem('highContrast') === 'true';
+      if (isHighContrast) document.body.classList.add('high-contrast');
+      const savedFontSize = localStorage.getItem('fontSize');
+      if (savedFontSize) document.body.style.fontSize = savedFontSize;
+
+      elements.companyName.addEventListener('input', debouncedGenerateBarcodes);
+      elements.pnInput.addEventListener('input', debouncedGenerateBarcodes);
+      elements.qtyInput.addEventListener('input', debouncedGenerateBarcodes);
+      elements.lotInput.addEventListener('input', debouncedGenerateBarcodes);
+      elements.dcInput.addEventListener('input', debouncedGenerateBarcodes);
+    };
+  </script>
 </body>
 </html>
-
