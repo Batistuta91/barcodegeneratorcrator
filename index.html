@@ -87,6 +87,7 @@
       justify-content: center;
       align-items: center;
       margin-top: 2em;
+      gap: 10px; /* Added gap for spacing between buttons */
     }
 
     .print-button {
@@ -264,6 +265,7 @@
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+39&display=swap" rel="stylesheet">
 </head>
+
 <body>
   <img class="logo" src="https://cdn.glitch.global/9726a4ab-4574-49d7-b064-6b475be18bad/07c4917b-19f1-4364-b996-daa6f36e3790.image.png?v=1736146128831" alt="Logo">
   <div class="language-buttons" aria-label="Language selection">
@@ -305,6 +307,7 @@
     </div>
     <div id="copiesContainer" aria-live="polite"></div>
     <div class="print-button-container">
+      <button class="print-button" onclick="runDemo()" aria-label="Run Demo">הדגמה</button>
       <button class="print-button" onclick="showPreview()" aria-label="Show Preview">הצג</button>
     </div>
   </div>
@@ -337,6 +340,7 @@
         copyButton: "Create Copies",
         printButton: "Print",
         showButton: "Show",
+        demoButton: "Demo", /* Added Demo Button text */
         invalidQty: "Please enter a valid number for quantity",
         invalidDate: "Please enter a valid date format (DD.MM.YYYY)",
         increaseFont: "Increase Font",
@@ -360,6 +364,7 @@
         copyButton: "צור עותקים",
         printButton: "הדפס",
         showButton: "הצג",
+        demoButton: "הדגמה", /* Added Demo Button text */
         invalidQty: "נא להזין מספר תקין לכמות",
         invalidDate: "נא להזין תאריך בפורמט תקין (DD.MM.YYYY)",
         increaseFont: "הגדל גופן",
@@ -383,6 +388,7 @@
         copyButton: "创建副本",
         printButton: "打印",
         showButton: "显示",
+        demoButton: "演示", /* Added Demo Button text */
         invalidQty: "请输入有效的数量",
         invalidDate: "请输入有效的日期格式 (DD.MM.YYYY)",
         increaseFont: "增大字体",
@@ -434,7 +440,13 @@
       elements.dcInput.placeholder = translations[language].dcInput;
       document.getElementById("copyLabel").innerText = translations[language].copyLabel;
       document.getElementById("copyButton").innerText = translations[language].copyButton;
-      document.querySelector(".print-button").innerText = translations[language].showButton;
+      
+      const printButtons = document.querySelectorAll(".print-button");
+      if (printButtons.length > 0) {
+        printButtons[0].innerText = translations[language].demoButton; /* First button is now Demo */
+        printButtons[1].innerText = translations[language].showButton; /* Second button is Show */
+      }
+      
       // Update accessibility buttons
       elements.increaseFont.innerText = translations[language].increaseFont;
       elements.decreaseFont.innerText = translations[language].decreaseFont;
@@ -505,6 +517,26 @@
         `;
       }
       elements.copiesContainer.innerHTML = html;
+    }
+
+    /* New function to run a demo */
+    function runDemo() {
+      // Set demo values
+      elements.companyName.value = "DEMO COMPANY";
+      elements.pnInput.value = "DEMO12345";
+      elements.qtyInput.value = "10";
+      elements.lotInput.value = "LOT6789";
+      elements.dcInput.value = "12.08.2025";
+      elements.copyInput.value = "3";
+      
+      // Update the barcodes on the main page
+      updateBarcode('pnInput', 'pn-barcode');
+      updateBarcode('qtyInput', 'qty-barcode');
+      updateBarcode('lotInput', 'lot-barcode');
+      updateBarcode('dcInput', 'dc-barcode');
+
+      // Generate the copies
+      generateCopies();
     }
 
     function isValidNumber(value) {
