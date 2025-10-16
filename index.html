@@ -87,7 +87,7 @@
       justify-content: center;
       align-items: center;
       margin-top: 2em;
-      gap: 10px; /* Added gap for spacing between buttons */
+      gap: 10px;
     }
 
     .print-button {
@@ -139,6 +139,7 @@
       flex-grow: 1;
       text-align: center;
       margin-bottom: 0.5em;
+      word-break: break-word;
     }
 
     .barcode {
@@ -154,6 +155,7 @@
       margin-bottom: 0.5em;
       width: 100%;
       text-align: center;
+      word-break: break-word;
     }
 
     .frame {
@@ -277,32 +279,32 @@
     <h1 id="title" aria-live="polite">צור את הברקוד שלך</h1>
     <div class="barcode-container">
       <label for="companyName">שם החברה:</label>
-      <input type="text" class="barcode-input" id="companyName" placeholder="שם החברה" aria-label="Company Name" aria-required="true">
+      <input type="text" class="barcode-input" id="companyName" placeholder="שם החברה" aria-label="Company Name">
 
       <div>
         <label for="pnInput" class="barcode-label" id="pnLabel">P/N:</label>
-        <input type="text" class="barcode-input" id="pnInput" placeholder="טקסט באותיות גדולות" aria-label="P/N" aria-required="true">
+        <input type="text" class="barcode-input" id="pnInput" placeholder="טקסט חופשי" aria-label="P/N">
         <div class="barcode pn-barcode" aria-live="polite" aria-label="Barcode for P/N"></div>
       </div>
       <div>
         <label for="qtyInput" class="barcode-label" id="qtyLabel">QTY:</label>
-        <input type="number" class="barcode-input" id="qtyInput" placeholder="מספרים בלבד" aria-label="QTY" aria-required="true">
+        <input type="text" class="barcode-input" id="qtyInput" placeholder="טקסט חופשי" aria-label="QTY">
         <div class="barcode qty-barcode" aria-live="polite" aria-label="Barcode for QTY"></div>
       </div>
       <div>
         <label for="lotInput" class="barcode-label" id="lotLabel">LOT:</label>
-        <input type="text" class="barcode-input" id="lotInput" placeholder="טקסט באותיות גדולות" aria-label="LOT" aria-required="true">
+        <input type="text" class="barcode-input" id="lotInput" placeholder="טקסט חופשי" aria-label="LOT">
         <div class="barcode lot-barcode" aria-live="polite" aria-label="Barcode for LOT"></div>
       </div>
       <div>
         <label for="dcInput" class="barcode-label" id="dcLabel">D/C:</label>
-        <input type="text" class="barcode-input" id="dcInput" placeholder="תאריך 01.01.2222" aria-label="D/C" aria-required="true">
+        <input type="text" class="barcode-input" id="dcInput" placeholder="תאריך חופשי (לא חובה פורמט)" aria-label="D/C">
         <div class="barcode dc-barcode" aria-live="polite" aria-label="Barcode for D/C"></div>
       </div>
     </div>
     <div class="copy-input">
       <label for="copy" id="copyLabel">מספר עותקים:</label>
-      <input type="number" id="copy" min="1" value="1" aria-label="Number of Copies" aria-required="true">
+      <input type="text" id="copy" value="1" aria-label="Number of Copies">
       <button id="copyButton" onclick="generateCopies()">צור עותקים</button>
     </div>
     <div id="copiesContainer" aria-live="polite"></div>
@@ -332,17 +334,15 @@
         qtyLabel: "QTY:",
         lotLabel: "LOT:",
         dcLabel: "D/C:",
-        pnInput: "Text in uppercase",
-        qtyInput: "Numbers only",
-        lotInput: "Text in uppercase",
-        dcInput: "Date 01.01.2222",
+        pnInput: "Free text",
+        qtyInput: "Free text",
+        lotInput: "Free text",
+        dcInput: "Free date (no format)",
         copyLabel: "Number of Copies:",
         copyButton: "Create Copies",
         printButton: "Print",
         showButton: "Show",
-        demoButton: "Demo", /* Added Demo Button text */
-        invalidQty: "Please enter a valid number for quantity",
-        invalidDate: "Please enter a valid date format (DD.MM.YYYY)",
+        demoButton: "Demo",
         increaseFont: "Increase Font",
         decreaseFont: "Decrease Font",
         highContrast: "High Contrast",
@@ -356,17 +356,15 @@
         qtyLabel: "QTY:",
         lotLabel: "LOT:",
         dcLabel: "D/C:",
-        pnInput: "טקסט באותיות גדולות",
-        qtyInput: "מספרים בלבד",
-        lotInput: "טקסט באותיות גדולות",
-        dcInput: "תאריך 01.01.2222",
+        pnInput: "טקסט חופשי",
+        qtyInput: "טקסט חופשי",
+        lotInput: "טקסט חופשי",
+        dcInput: "תאריך חופשי (לא חובה פורמט)",
         copyLabel: "מספר עותקים:",
         copyButton: "צור עותקים",
         printButton: "הדפס",
         showButton: "הצג",
-        demoButton: "הדגמה", /* Added Demo Button text */
-        invalidQty: "נא להזין מספר תקין לכמות",
-        invalidDate: "נא להזין תאריך בפורמט תקין (DD.MM.YYYY)",
+        demoButton: "הדגמה",
         increaseFont: "הגדל גופן",
         decreaseFont: "הקטן גופן",
         highContrast: "ניגודיות גבוהה",
@@ -380,17 +378,15 @@
         qtyLabel: "QTY:",
         lotLabel: "LOT:",
         dcLabel: "D/C:",
-        pnInput: "大写字母",
-        qtyInput: "仅限数字",
-        lotInput: "大写字母",
-        dcInput: "日期 01.01.2222",
+        pnInput: "自由文本",
+        qtyInput: "自由文本",
+        lotInput: "自由文本",
+        dcInput: "自由日期（无格式要求）",
         copyLabel: "副本数量:",
         copyButton: "创建副本",
         printButton: "打印",
         showButton: "显示",
-        demoButton: "演示", /* Added Demo Button text */
-        invalidQty: "请输入有效的数量",
-        invalidDate: "请输入有效的日期格式 (DD.MM.YYYY)",
+        demoButton: "演示",
         increaseFont: "增大字体",
         decreaseFont: "减小字体",
         highContrast: "高对比度",
@@ -420,8 +416,12 @@
       };
     }
 
+    // סניטציה אמיתית כדי לאפשר טקסט חופשי בלי סיכוני HTML
     function sanitizeInput(input) {
-      return input.replace(/</g, '<').replace(/>/g, '>');
+      return String(input)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
     }
 
     function setLanguage(language) {
@@ -440,14 +440,13 @@
       elements.dcInput.placeholder = translations[language].dcInput;
       document.getElementById("copyLabel").innerText = translations[language].copyLabel;
       document.getElementById("copyButton").innerText = translations[language].copyButton;
-      
+
       const printButtons = document.querySelectorAll(".print-button");
       if (printButtons.length > 0) {
-        printButtons[0].innerText = translations[language].demoButton; /* First button is now Demo */
-        printButtons[1].innerText = translations[language].showButton; /* Second button is Show */
+        printButtons[0].innerText = translations[language].demoButton;
+        printButtons[1].innerText = translations[language].showButton;
       }
-      
-      // Update accessibility buttons
+
       elements.increaseFont.innerText = translations[language].increaseFont;
       elements.decreaseFont.innerText = translations[language].decreaseFont;
       elements.highContrast.innerText = translations[language].highContrast;
@@ -457,7 +456,8 @@
     function updateBarcode(inputId, barcodeClass) {
       const input = elements[inputId];
       const barcodeDiv = document.querySelector(`.${barcodeClass}`);
-      barcodeDiv.innerText = `*${sanitizeInput(input.value)}*`;
+      // Code39 דורש * בתחילה ובסוף – נשמר, אך התוכן חופשי
+      barcodeDiv.innerHTML = `*${sanitizeInput(input.value)}*`;
     }
 
     const debouncedGenerateBarcodes = debounce(() => {
@@ -479,12 +479,13 @@
       `;
     }
 
+    function normalizeCopies(value) {
+      const n = parseInt(String(value).trim(), 10);
+      return (isNaN(n) || n < 1) ? 1 : n;
+    }
+
     function generateCopies() {
-      const numCopies = parseInt(elements.copyInput.value);
-      if (isNaN(numCopies) || numCopies < 1) {
-        alert(translations[currentLanguage].invalidQty);
-        return;
-      }
+      const numCopies = normalizeCopies(elements.copyInput.value);
 
       const values = {
         company: elements.companyName.value,
@@ -494,63 +495,40 @@
         dc: elements.dcInput.value
       };
 
-      if (!isValidNumber(values.qty)) {
-        alert(translations[currentLanguage].invalidQty);
-        return;
-      }
-
-      if (!isValidDate(values.dc)) {
-        alert(translations[currentLanguage].invalidDate);
-        return;
-      }
-
       let html = '';
       for (let i = 0; i < numCopies; i++) {
         html += `
           <div class="frame" role="region" aria-label="Barcode Copy ${i + 1}">
             <div class="company-name">${sanitizeInput(values.company)}</div>
-            ${createBarcodeElement(translations[currentLanguage].pnLabel, `*${values.pn}*`, values.pn)}
-            ${createBarcodeElement(translations[currentLanguage].qtyLabel, `*${values.qty}*`, values.qty)}
-            ${createBarcodeElement(translations[currentLanguage].lotLabel, `*${values.lot}*`, values.lot)}
-            ${createBarcodeElement(translations[currentLanguage].dcLabel, `*${values.dc}*`, values.dc)}
+            ${createBarcodeElement(translations[currentLanguage].pnLabel, `*${sanitizeInput(values.pn)}*`, values.pn)}
+            ${createBarcodeElement(translations[currentLanguage].qtyLabel, `*${sanitizeInput(values.qty)}*`, values.qty)}
+            ${createBarcodeElement(translations[currentLanguage].lotLabel, `*${sanitizeInput(values.lot)}*`, values.lot)}
+            ${createBarcodeElement(translations[currentLanguage].dcLabel, `*${sanitizeInput(values.dc)}*`, values.dc)}
           </div>
         `;
       }
       elements.copiesContainer.innerHTML = html;
     }
 
-    /* New function to run a demo */
     function runDemo() {
-      // Set demo values
       elements.companyName.value = "DEMO COMPANY";
       elements.pnInput.value = "DEMO12345";
-      elements.qtyInput.value = "10";
-      elements.lotInput.value = "LOT6789";
-      elements.dcInput.value = "12.08.2025";
+      elements.qtyInput.value = "10 יח'";
+      elements.lotInput.value = "LOT-6789/A";
+      elements.dcInput.value = "אוגוסט 2025";
       elements.copyInput.value = "3";
-      
-      // Update the barcodes on the main page
+
       updateBarcode('pnInput', 'pn-barcode');
       updateBarcode('qtyInput', 'qty-barcode');
       updateBarcode('lotInput', 'lot-barcode');
       updateBarcode('dcInput', 'dc-barcode');
 
-      // Generate the copies
       generateCopies();
-    }
-
-    function isValidNumber(value) {
-      return /^\d+$/.test(value);
-    }
-
-    function isValidDate(value) {
-      const datePattern = /^\d{2}\.\d{2}\.\d{4}$/;
-      return datePattern.test(value);
     }
 
     function showPreview() {
       const previewWindow = window.open("", "_blank");
-      const htmlContent = elements.copiesContainer.innerHTML;
+      const htmlContent = elements.copiesContainer.innerHTML || '';
       const printButtonLabel = translations[currentLanguage].printButton;
       const isHighContrastClass = isHighContrast ? 'high-contrast' : '';
 
@@ -593,9 +571,7 @@
               font-size: 1.2em;
               margin-bottom: 0.5em;
               transition: color 0.3s;
-            }
-            body.high-contrast .company-name {
-              color: #fff;
+              word-break: break-word;
             }
             .barcode-element {
               display: flex;
@@ -609,16 +585,11 @@
               text-align: center;
               transition: color 0.3s;
             }
-            body.high-contrast .barcode-label {
-              color: #fff;
-            }
             .entered-text {
               text-align: center;
               margin-bottom: 0.5em;
               transition: color 0.3s;
-            }
-            body.high-contrast .entered-text {
-              color: #fff;
+              word-break: break-word;
             }
             .barcode {
               font-family: 'Libre Barcode 39', cursive;
@@ -626,9 +597,7 @@
               width: 100%;
               text-align: center;
               transition: color 0.3s;
-            }
-            body.high-contrast .barcode {
-              color: #fff;
+              word-break: break-word;
             }
             .print-button {
               font-size: 1.2em;
@@ -654,15 +623,13 @@
               bottom: 20px;
             }
             @media print {
-              .print-button-container {
-                display: none;
-              }
+              .print-button-container { display: none; }
             }
           </style>
           <link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+39&display=swap" rel="stylesheet">
         </head>
         <body class="${isHighContrastClass}">
-          ${htmlContent}
+          ${htmlContent || '<div style="padding:2em;text-align:center;">אין תוכן להצגה. לחץ "צור עותקים" תחילה.</div>'}
           <div class="print-button-container">
             <button class="print-button" onclick="window.print()">${printButtonLabel}</button>
           </div>
